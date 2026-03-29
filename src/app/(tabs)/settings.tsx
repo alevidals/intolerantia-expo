@@ -1,11 +1,9 @@
 import { Check, Search } from "@tamagui/lucide-icons-2";
 import { useFocusEffect } from "expo-router";
 import { useCallback, useState } from "react";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {
 	Button,
 	Checkbox,
-	getTokens,
 	Input,
 	ListItem,
 	ScrollView,
@@ -29,9 +27,6 @@ export default function SettingsTab() {
 	const filteredAllergies = ALLERGIES.filter((allergy) =>
 		ALLERGY_LABELS[allergy].toLowerCase().includes(input.toLowerCase()),
 	);
-
-	const tokens = getTokens();
-	const { top } = useSafeAreaInsets();
 
 	useFocusEffect(
 		useCallback(() => {
@@ -99,6 +94,7 @@ export default function SettingsTab() {
 									width="$1.5"
 									rounded="$2"
 									checked={formState.includes(allergy)}
+									onCheckedChange={() => toggleAllergy(allergy)}
 								>
 									<Checkbox.Indicator
 										bg="$blue11"
