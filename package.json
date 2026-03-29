@@ -9,10 +9,10 @@
 		"web": "expo start --web"
 	},
 	"dependencies": {
-		"@react-native-async-storage/async-storage": "^3.0.2",
+		"@react-native-async-storage/async-storage": "2.2.0",
 		"@tamagui/config": "2.0.0-rc.33",
-		"@tamagui/linear-gradient": "2.0.0-rc.33",
 		"@tamagui/lucide-icons-2": "2.0.0-rc.33",
+		"burnt": "^0.13.0",
 		"expo": "55.0.10-canary-20260328-2049187",
 		"expo-constants": "55.0.10-canary-20260328-2049187",
 		"expo-linear-gradient": "55.0.10-canary-20260328-2049187",
@@ -23,7 +23,7 @@
 		"react-native": "0.83.4",
 		"react-native-safe-area-context": "~5.6.2",
 		"react-native-screens": "~4.23.0",
-		"react-native-svg": "^15.15.4",
+		"react-native-svg": "15.15.4",
 		"tamagui": "2.0.0-rc.33",
 		"zustand": "^5.0.12"
 	},

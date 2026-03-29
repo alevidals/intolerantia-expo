@@ -1,4 +1,6 @@
 import { Check, Search } from "@tamagui/lucide-icons-2";
+import { useFocusEffect } from "expo-router";
+import { useCallback, useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {
 	Button,
@@ -12,44 +14,49 @@ import {
 	XStack,
 	YGroup,
 } from "tamagui";
-import { LinearGradient } from "tamagui/linear-gradient";
+import { TabHeader } from "@/components/tab-header";
 import { ALLERGIES, ALLERGY_LABELS } from "@/constants";
 import { useTodoStore } from "@/store/allergies";
+import type { Allergy } from "@/types/allergies";
 
 export default function SettingsTab() {
 	const allergies = useTodoStore((state) => state.allergies);
+	const setAllergies = useTodoStore((state) => state.setAllergies);
+
+	const [input, setInput] = useState("");
+	const [formState, setFormState] = useState(allergies);
+
+	const filteredAllergies = ALLERGIES.filter((allergy) =>
+		ALLERGY_LABELS[allergy].toLowerCase().includes(input.toLowerCase()),
+	);
 
 	const tokens = getTokens();
 	const { top } = useSafeAreaInsets();
 
+	useFocusEffect(
+		useCallback(() => {
+			setFormState(allergies);
+		}, [allergies]),
+	);
+
+	function toggleAllergy(allergy: Allergy) {
+		setFormState((prev) =>
+			prev.includes(allergy)
+				? prev.filter((a) => a !== allergy)
+				: [...prev, allergy],
+		);
+	}
+
+	function savePreferences() {
+		setAllergies(formState);
+	}
+
 	return (
 		<View flex={1}>
-			<View
-				px="$4"
-				pt={tokens.size.$3.val + top}
-				pb="$5"
-				position="relative"
-				mb="$6"
-			>
-				<LinearGradient
-					colors={["$blue12", "$blue10", "$blue7"]}
-					start={[0, 0]}
-					end={[0, 1]}
-					inset={0}
-					position="absolute"
-					borderBottomLeftRadius="$8"
-					borderBottomRightRadius="$8"
-				/>
-				<Text fontSize="$8" fontWeight={700} mb="$2" color="$white">
-					Settings
-				</Text>
-				<Text color="$white" fontWeight={400}>
-					Manage your allergens & preferences
-				</Text>
-			</View>
+			<TabHeader title="Settings" description="Manage your allergies" />
 			<View px="$4" flex={1} mb="$6">
 				<XStack
-					bg="$gray4"
+					bg="$gray5"
 					rounded="$8"
 					justify="center"
 					self="center"
@@ -58,7 +65,7 @@ export default function SettingsTab() {
 					px="$4"
 					mb="$6"
 				>
-					<Search size={22} color="$gray10" self="center" />
+					<Search size={22} color="$gray11" self="center" />
 					<Input
 						flex={1}
 						bg="transparent"
@@ -66,12 +73,23 @@ export default function SettingsTab() {
 						height="100%"
 						border="none"
 						placeholder="Search allergies..."
+						placeholderTextColor="$gray10"
+						value={input}
+						onChangeText={setInput}
 					/>
 				</XStack>
 				<ScrollView flex={1} showsVerticalScrollIndicator={false}>
 					<YGroup gap="$3">
-						{ALLERGIES.map((allergy) => (
-							<ListItem p="$5" bg="white" key={allergy} rounded="$8">
+						{filteredAllergies.map((allergy) => (
+							<ListItem
+								p="$5"
+								bg="white"
+								key={allergy}
+								rounded="$8"
+								borderColor={formState.includes(allergy) ? "$blue11" : "white"}
+								borderWidth={2}
+								onPress={() => toggleAllergy(allergy)}
+							>
 								<Text fontSize="$4" fontWeight="bold">
 									{ALLERGY_LABELS[allergy]}
 								</Text>
@@ -80,7 +98,7 @@ export default function SettingsTab() {
 									height="$1.5"
 									width="$1.5"
 									rounded="$2"
-									defaultChecked={allergies.includes(allergy)}
+									checked={formState.includes(allergy)}
 								>
 									<Checkbox.Indicator
 										bg="$blue11"
@@ -97,7 +115,13 @@ export default function SettingsTab() {
 						))}
 					</YGroup>
 				</ScrollView>
-				<Button bg="$blue11" size="$6" rounded="$8" mt="$6">
+				<Button
+					bg="$blue11"
+					size="$6"
+					rounded="$8"
+					mt="$6"
+					onPress={savePreferences}
+				>
 					<Text color="$white" fontSize="$5" fontWeight={600}>
 						Save preferences
 					</Text>

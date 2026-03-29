@@ -5,6 +5,7 @@ import type { Allergy } from "@/types/allergies";
 
 type TodoStore = {
 	allergies: Allergy[];
+	setAllergies: (allergies: Allergy[]) => void;
 	// todos: Todo[];
 	// addTodo: (text: string, priority: Priority) => void;
 	// toggleTodo: (id: number) => void;
@@ -15,6 +16,7 @@ export const useTodoStore = create<TodoStore>()(
 	persist(
 		(set) => ({
 			allergies: [],
+			setAllergies: (allergies) => set({ allergies }),
 			// todos: [],
 			// addTodo: (text, priority) =>
 			//   set((state) => ({
@@ -35,7 +37,7 @@ export const useTodoStore = create<TodoStore>()(
 			//   })),
 		}),
 		{
-			name: "todo-storage",
+			name: "allergies-storage",
 			storage: createJSONStorage(() => AsyncStorage),
 		},
 	),

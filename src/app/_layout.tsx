@@ -1,3 +1,5 @@
+import "@tamagui/native/setup-burnt";
+
 import "@tamagui/native/setup-expo-linear-gradient";
 
 import { Stack } from "expo-router";
