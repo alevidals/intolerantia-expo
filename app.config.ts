@@ -11,6 +11,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 	userInterfaceStyle: "light",
 	experiments: {
 		typedRoutes: true,
+		reactCompiler: true,
 	},
 	web: {
 		output: "server",
