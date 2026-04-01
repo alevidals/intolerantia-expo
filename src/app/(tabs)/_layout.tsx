@@ -2,10 +2,8 @@ import { History, ScanText, Settings2 } from "@tamagui/lucide-icons-2";
 import { Tabs, usePathname } from "expo-router";
 import { getTokens } from "tamagui";
 import { TabItem } from "@/components/tab-item";
-import { useLoadingStore } from "@/store/loading";
 
 export default function TabsLayout() {
-	const isLoading = useLoadingStore((state) => state.isLoading);
 	const pathname = usePathname();
 
 	const tokens = getTokens();
@@ -16,7 +14,6 @@ export default function TabsLayout() {
 			screenOptions={{
 				headerShown: false,
 				tabBarStyle: {
-					display: isLoading ? "none" : "flex",
 					margin: 0,
 					borderTopStartRadius: borderRadius10,
 					borderTopEndRadius: borderRadius10,

@@ -9,6 +9,20 @@ export default function RootLayout() {
 		<TamaguiProvider config={tamaguiConfig} defaultTheme="light">
 			<Stack>
 				<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+				<Stack.Screen
+					name="loading"
+					options={{
+						headerShown: false,
+						presentation: "fullScreenModal",
+					}}
+				/>
+				<Stack.Screen
+					name="error"
+					options={{
+						headerShown: false,
+						presentation: "fullScreenModal",
+					}}
+				/>
 			</Stack>
 		</TamaguiProvider>
 	);
