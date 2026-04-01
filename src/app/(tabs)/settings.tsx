@@ -1,25 +1,23 @@
-import { Check, Search } from "@tamagui/lucide-icons-2";
+import { Search } from "@tamagui/lucide-icons-2";
 import { useFocusEffect } from "expo-router";
 import { useCallback, useState } from "react";
 import {
 	Button,
-	Checkbox,
 	Input,
 	ListItem,
 	ScrollView,
 	Text,
 	View,
 	XStack,
-	YGroup,
 } from "tamagui";
 import { TabHeader } from "@/components/tab-header";
 import { ALLERGIES, ALLERGY_LABELS } from "@/constants";
-import { useTodoStore } from "@/store/allergies";
+import { useAllergyStore } from "@/store/allergies";
 import type { Allergy } from "@/types/allergies";
 
 export default function SettingsTab() {
-	const allergies = useTodoStore((state) => state.allergies);
-	const setAllergies = useTodoStore((state) => state.setAllergies);
+	const allergies = useAllergyStore((state) => state.allergies);
+	const setAllergies = useAllergyStore((state) => state.setAllergies);
 
 	const [input, setInput] = useState("");
 	const [formState, setFormState] = useState(allergies);
@@ -74,42 +72,28 @@ export default function SettingsTab() {
 					/>
 				</XStack>
 				<ScrollView flex={1} showsVerticalScrollIndicator={false}>
-					<YGroup gap="$3">
+					<XStack flexWrap="wrap" gap="$3">
 						{filteredAllergies.map((allergy) => (
 							<ListItem
+								width="48%"
 								p="$5"
-								bg="white"
 								key={allergy}
 								rounded="$8"
 								borderColor={formState.includes(allergy) ? "$blue11" : "white"}
 								borderWidth={2}
+								bg={formState.includes(allergy) ? "$blue3" : "$white"}
+								pressStyle={{
+									borderColor: "$blue11",
+									bg: "$blue6",
+								}}
 								onPress={() => toggleAllergy(allergy)}
 							>
 								<Text fontSize="$4" fontWeight="bold">
 									{ALLERGY_LABELS[allergy]}
 								</Text>
-								<Checkbox
-									bg="white"
-									height="$1.5"
-									width="$1.5"
-									rounded="$2"
-									checked={formState.includes(allergy)}
-									onCheckedChange={() => toggleAllergy(allergy)}
-								>
-									<Checkbox.Indicator
-										bg="$blue11"
-										width="$1.5"
-										height="$1.5"
-										alignItems="center"
-										justifyContent="center"
-										rounded="$2"
-									>
-										<Check color="white" strokeWidth={4} />
-									</Checkbox.Indicator>
-								</Checkbox>
 							</ListItem>
 						))}
-					</YGroup>
+					</XStack>
 				</ScrollView>
 				<Button
 					bg="$blue11"
@@ -117,6 +101,9 @@ export default function SettingsTab() {
 					rounded="$8"
 					mt="$6"
 					onPress={savePreferences}
+					pressStyle={{
+						bg: "$blue12",
+					}}
 				>
 					<Text color="$white" fontSize="$5" fontWeight={600}>
 						Save preferences

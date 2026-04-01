@@ -9,11 +9,16 @@
 		"web": "expo start --web"
 	},
 	"dependencies": {
+		"@ai-sdk/fireworks": "^2.0.42",
+		"@ai-sdk/react": "3.0.144",
+		"@openrouter/ai-sdk-provider": "^2.3.3",
 		"@react-native-async-storage/async-storage": "2.2.0",
 		"@tamagui/config": "2.0.0-rc.31",
 		"@tamagui/lucide-icons-2": "2.0.0-rc.31",
+		"ai": "6.0.142",
 		"expo": "~54.0.33",
 		"expo-constants": "~18.0.13",
+		"expo-image-picker": "~17.0.10",
 		"expo-linear-gradient": "15.0.8",
 		"expo-linking": "~8.0.11",
 		"expo-router": "~6.0.23",
@@ -24,6 +29,7 @@
 		"react-native-screens": "~4.16.0",
 		"react-native-svg": "^15.12.1",
 		"tamagui": "2.0.0-rc.31",
+		"zod": "4.3.6",
 		"zustand": "^5.0.12"
 	},
 	"devDependencies": {

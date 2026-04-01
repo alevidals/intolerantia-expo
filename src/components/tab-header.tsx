@@ -29,10 +29,10 @@ export function TabHeader({ title, description }: Props) {
 				borderBottomLeftRadius="$8"
 				borderBottomRightRadius="$8"
 			/>
-			<Text fontSize="$8" fontWeight={700} mb="$2" color="$white">
+			<Text fontSize="$8" fontWeight={800} mb="$2" color="$white">
 				{title}
 			</Text>
-			<Text color="$white" fontWeight={400}>
+			<Text color="$white" fontWeight={400} fontSize="$3">
 				{description}
 			</Text>
 		</View>
