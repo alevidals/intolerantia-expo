@@ -23,6 +23,13 @@ export default function RootLayout() {
 						presentation: "fullScreenModal",
 					}}
 				/>
+				<Stack.Screen
+					name="history/[id]"
+					options={{
+						headerShown: false,
+						presentation: "modal",
+					}}
+				/>
 			</Stack>
 		</TamaguiProvider>
 	);
