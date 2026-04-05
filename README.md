@@ -45,7 +45,7 @@ npm install -g pnpm
 1. Clone the repository
 
 ```bash
-git clone https://github.com/alevidals/intolerantIA.git
+git clone https://github.com/alevidals/intolerantia-expo.git
 ```
 
 2. Install the packages
