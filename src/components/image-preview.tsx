@@ -1,4 +1,4 @@
-import { ImagePlus } from "@tamagui/lucide-icons-2";
+import { Image as ImageIcon } from "@tamagui/lucide-icons-2";
 import type { GestureResponderEvent } from "react-native";
 import { Button, getTokens, Image } from "tamagui";
 
@@ -7,24 +7,28 @@ type Props = {
 	imageUri?: string;
 };
 
-export function ImagePickerButton({ onPress, imageUri }: Props) {
+export function ImagePreview({ onPress, imageUri }: Props) {
 	const tokens = getTokens();
 
 	return (
 		<Button
 			flex={1}
 			borderStyle="dashed"
-			bg="$blue4"
+			bg="#DBE5F4"
 			borderWidth="$1"
-			borderColor="$blue10"
+			borderColor="#003D9B"
 			height="$9"
 			p="$2"
+			disabled={!imageUri}
+			disabledStyle={{
+				opacity: 0.5,
+			}}
 			onPress={onPress}
 			pressStyle={{
-				bg: "$blue6",
-				borderWidth: "$1",
-				borderColor: "$blue10",
-				borderStyle: "dashed",
+				scale: 0.98,
+				bg: "#DBE5F4",
+				opacity: 0.9,
+				borderColor: "#003D9B",
 			}}
 		>
 			{imageUri ? (
@@ -35,7 +39,7 @@ export function ImagePickerButton({ onPress, imageUri }: Props) {
 					borderRadius={tokens.size["$0.75"].val}
 				/>
 			) : (
-				<ImagePlus color="$blue10" size="$2.5" />
+				<ImageIcon color="#003D9B" size="$2" />
 			)}
 		</Button>
 	);

@@ -9,7 +9,6 @@ export default function LoadingScreen() {
 	const setIsLoading = useAppState((state) => state.setIsLoading);
 
 	useEffect(() => {
-		// Si no está cargando, volver atrás
 		const isLoading = useAppState.getState().isLoading;
 		if (!isLoading) {
 			router.back();

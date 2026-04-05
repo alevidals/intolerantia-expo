@@ -8,7 +8,6 @@ export default function ErrorScreen() {
 	const setIsError = useAppState((state) => state.setIsError);
 
 	useEffect(() => {
-		// Si no hay error, volver atrás
 		const isError = useAppState.getState().isError;
 		if (!isError) {
 			router.back();

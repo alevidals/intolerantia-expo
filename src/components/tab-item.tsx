@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import type { GestureResponderEvent } from "react-native";
-import { Text, YStack } from "tamagui";
+import { YStack } from "tamagui";
 
 type Props = {
 	onPress:
@@ -17,10 +17,9 @@ type Props = {
 		| undefined;
 	focused: boolean;
 	icon: ReactNode;
-	label: string;
 };
 
-export function TabItem({ onPress, focused, icon, label }: Props) {
+export function TabItem({ onPress, focused, icon }: Props) {
 	return (
 		<YStack
 			flex={1}
@@ -32,15 +31,11 @@ export function TabItem({ onPress, focused, icon, label }: Props) {
 				justify="center"
 				p="$2.5"
 				rounded="$8"
-				bg={focused ? "$blue3" : "transparent"}
+				bg={focused ? "#DBE5F4" : "transparent"}
 				gap="$1"
 				scale={focused ? 1.05 : 1}
 			>
 				{icon}
-
-				<Text fontSize="$2" color={focused ? "$blue9" : "$gray10"}>
-					{label}
-				</Text>
 			</YStack>
 		</YStack>
 	);

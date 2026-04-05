@@ -1,18 +1,11 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
-
-type ScanHistory = {
-	id: number;
-	images: string[];
-	canEat: string[];
-	cannotEat: string[];
-	askRestaurant: string[];
-};
+import type { Scan } from "@/types/scan";
 
 type HistoryStore = {
-	history: ScanHistory[];
-	addScan: (scan: Omit<ScanHistory, "id">) => void;
+	history: Scan[];
+	addScan: (scan: Omit<Scan, "id">) => void;
 	deleteScan: (id: number) => void;
 	clearHistory: () => void;
 };
@@ -22,7 +15,7 @@ export const useHistoryStore = create<HistoryStore>()(
 		(set, get) => ({
 			history: [],
 			addScan: (scan) => {
-				const newScan: ScanHistory = {
+				const newScan: Scan = {
 					...scan,
 					id: Date.now(),
 				};

@@ -4,6 +4,13 @@ import { createTamagui } from "tamagui";
 
 export const tamaguiConfig = createTamagui({
 	...defaultConfig,
+	themes: {
+		...defaultConfig.themes,
+		light: {
+			...defaultConfig.themes?.light,
+			background: "#F8F9FB",
+		},
+	},
 	animations: createAnimations({
 		bouncy: {
 			damping: 10,

@@ -12,4 +12,12 @@ export const scanOutputSchema = z.object({
 	askRestaurant: z.array(z.string()).default([]),
 });
 
+export type Scan = {
+	id: number;
+	images: string[];
+	canEat: string[];
+	cannotEat: string[];
+	askRestaurant: string[];
+};
+
 export type ScanOutputSchema = z.infer<typeof scanOutputSchema>;

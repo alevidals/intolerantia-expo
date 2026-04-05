@@ -1,4 +1,5 @@
-import { ListItem, Text, View } from "tamagui";
+import { type ReactNode, useState } from "react";
+import { ListItem, Text, View, YStack } from "tamagui";
 import { ALLERGY_LABELS } from "@/constants";
 import type { Allergy } from "@/types/allergies";
 
@@ -8,29 +9,60 @@ type Props = {
 	onToggle: (allergy: Allergy) => void;
 };
 
+const ALLERGY_ICONS: Record<Allergy, ReactNode> = {
+	CELERY: "🥬",
+	CRUSTACEANS: "🦐",
+	EGGS: "🥚",
+	FISH: "🐟",
+	COW_PROTEIN: "🥛",
+	DAIRY: "🧀",
+	GLUTEN: "🌾",
+	LUPINS: "🌰",
+	MUSTARD: "🌭",
+	PEANUTS: "🥜",
+	LACTOSE: "🥛",
+	MOLLUSKS: "🐚",
+	SESAME_SEEDS: "🌿",
+	SOY: "🌱",
+	TREE_NUTS: "🌰",
+};
+
 export function AllergyCard({ allergy, isSelected, onToggle }: Props) {
-	const handlePress = () => {
+	const [isPressed, setIsPressed] = useState(false);
+
+	function toggleAllergy() {
 		onToggle(allergy);
-	};
+	}
+
+	function togglePressState() {
+		setIsPressed((prev) => !prev);
+	}
+
+	const textColor = isSelected || isPressed ? "#003D9B" : "$black";
 
 	return (
 		<View p="$2">
 			<ListItem
-				py="$5"
-				px="$4"
+				p="$3"
 				rounded="$8"
-				borderColor={isSelected ? "$blue11" : "white"}
-				borderWidth={2}
-				bg={isSelected ? "$blue3" : "$white"}
+				borderColor={isSelected ? "#003D9B" : "white"}
+				borderWidth="$0.75"
+				bg={isSelected ? "#DBE5F4" : "$white"}
 				pressStyle={{
-					borderColor: "$blue11",
-					bg: "$blue6",
+					borderColor: "#003D9B",
+					bg: "#DBE5F4",
+					scale: 0.98,
 				}}
-				onPress={handlePress}
+				onPress={toggleAllergy}
+				onPressIn={togglePressState}
+				onPressOut={togglePressState}
 			>
-				<Text fontSize="$4" fontWeight="bold">
-					{ALLERGY_LABELS[allergy]}
-				</Text>
+				<YStack gap="$2">
+					<Text fontSize={24}>{ALLERGY_ICONS[allergy]}</Text>
+					<Text fontSize="$4" fontWeight="bold" color={textColor}>
+						{ALLERGY_LABELS[allergy]}
+					</Text>
+				</YStack>
 			</ListItem>
 		</View>
 	);

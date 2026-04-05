@@ -1,23 +1,7 @@
-import {
-	AlertCircle,
-	CheckCircle2,
-	ChevronRight,
-	Trash2,
-	XCircle,
-} from "@tamagui/lucide-icons-2";
-import { useRouter } from "expo-router";
-import { ScrollView, TouchableOpacity } from "react-native";
-import {
-	Button,
-	Card,
-	Image,
-	Separator,
-	Text,
-	View,
-	XStack,
-	YStack,
-} from "tamagui";
-import { TabHeader } from "@/components/tab-header";
+import { FlashList } from "@shopify/flash-list";
+import { Trash2 } from "@tamagui/lucide-icons-2";
+import { Button, Text, View, XStack } from "tamagui";
+import { HistoryCard } from "@/components/history-card";
 import { useHistoryStore } from "@/store/history";
 
 type ScanHistory = {
@@ -31,6 +15,10 @@ type ScanHistory = {
 type GroupedScans = {
 	[key: string]: ScanHistory[];
 };
+
+type HistoryListItem =
+	| { type: "section"; title: string }
+	| { type: "scan"; scan: ScanHistory; index: number };
 
 function getDateCategory(date: Date): string {
 	const now = new Date();
@@ -79,19 +67,10 @@ function groupScansByDate(scans: ScanHistory[]): GroupedScans {
 }
 
 export default function HistoryTab() {
-	const router = useRouter();
-	const { history, deleteScan, clearHistory } = useHistoryStore();
-
-	const totalDishes = history.reduce(
-		(acc, scan) =>
-			acc +
-			scan.canEat.length +
-			scan.cannotEat.length +
-			scan.askRestaurant.length,
-		0,
-	);
+	const { history, clearHistory } = useHistoryStore();
 
 	const groupedScans = groupScansByDate(history);
+
 	const categories = [
 		"Today",
 		"Yesterday",
@@ -100,182 +79,68 @@ export default function HistoryTab() {
 		"Older",
 	];
 
-	const openDetail = (scan: ScanHistory) => {
-		router.push(`/history/${scan.id}`);
-	};
+	const listData = categories.flatMap<HistoryListItem>((category) => {
+		const scans = groupedScans[category];
+
+		if (!scans || scans.length === 0) {
+			return [];
+		}
+
+		return [
+			{ type: "section", title: category },
+			...scans.map((scan, index) => ({ type: "scan" as const, scan, index })),
+		];
+	});
+
+	if (!history || history.length === 0) {
+		return (
+			<View px="$4" flex={1} mb="$6">
+				<Text color="#003D9B" fontSize="$4">
+					No scans yet. Start analyzing menus!
+				</Text>
+			</View>
+		);
+	}
 
 	return (
-		<View flex={1}>
-			<TabHeader
-				title="Scan History"
-				description={`${history.length} scans · ${totalDishes} dishes analyzed`}
-			/>
-			<ScrollView>
-				<View px="$4" pb="$6">
-					{history.length === 0 ? (
-						<View py="$10" items="center">
-							<Text color="$gray11" fontSize="$4">
-								No scans yet. Start analyzing menus!
+		<View px="$4" flex={1} mb="$6">
+			<FlashList
+				data={listData}
+				showsVerticalScrollIndicator={false}
+				keyExtractor={(item) =>
+					item.type === "section" ? `section-${item.title}` : `${item.scan.id}`
+				}
+				renderItem={({ item }) => {
+					if (item.type === "section") {
+						return (
+							<Text
+								fontSize="$4"
+								fontWeight="600"
+								color="#003D9B"
+								mt="$4"
+								mb="$3"
+							>
+								{item.title}
 							</Text>
+						);
+					}
+
+					return (
+						<View mb="$3">
+							<HistoryCard scan={item.scan} index={item.index} />
 						</View>
-					) : (
-						<YStack gap="$4">
-							<XStack justify="flex-end">
-								<Button size="$3" chromeless onPress={clearHistory}>
-									<Trash2 size={16} color="$red11" />
-									<Text color="$red11">Clear all</Text>
-								</Button>
-							</XStack>
-
-							{categories.map((category) => {
-								const scans = groupedScans[category];
-								if (!scans || scans.length === 0) return null;
-
-								return (
-									<YStack key={category} gap="$3">
-										<Text fontSize="$4" fontWeight="600" color="$gray10">
-											{category}
-										</Text>
-
-										<YStack gap="$3">
-											{scans.map((scan) => (
-												<TouchableOpacity
-													key={scan.id}
-													onPress={() => openDetail(scan)}
-												>
-													<Card
-														borderWidth={1}
-														borderColor="$gray5"
-														elevation={2}
-													>
-														<Card.Header p="$4">
-															<XStack justify="space-between" items="center">
-																<YStack gap="$1">
-																	<Text
-																		fontSize="$5"
-																		fontWeight="700"
-																		color="$gray12"
-																	>
-																		Scan #{scan.id.toString().slice(-4)}
-																	</Text>
-																	<Text fontSize="$3" color="$gray11">
-																		{new Date(scan.id).toLocaleDateString()} at{" "}
-																		{new Date(scan.id).toLocaleTimeString([], {
-																			hour: "2-digit",
-																			minute: "2-digit",
-																		})}
-																	</Text>
-																</YStack>
-																<XStack gap="$2" items="center">
-																	<TouchableOpacity
-																		onPress={(e) => {
-																			e.stopPropagation();
-																			deleteScan(scan.id);
-																		}}
-																	>
-																		<Text color="$red11" fontSize="$3">
-																			Delete
-																		</Text>
-																	</TouchableOpacity>
-																	<ChevronRight size={20} color="$gray9" />
-																</XStack>
-															</XStack>
-														</Card.Header>
-
-														{scan.images?.length > 0 && (
-															<XStack px="$4" pb="$3" gap="$2">
-																{scan.images.slice(0, 3).map((img) => (
-																	<Image
-																		key={`${scan.id}-${img}`}
-																		src={img}
-																		width={80}
-																		height={60}
-																		borderRadius={8}
-																	/>
-																))}
-															</XStack>
-														)}
-
-														<Separator />
-
-														<XStack p="$4" gap="$2" flexWrap="wrap">
-															{scan.canEat.length > 0 && (
-																<XStack
-																	px="$3"
-																	py="$2"
-																	gap="$1"
-																	flex={1}
-																	items="center"
-																	justify="center"
-																	bg="$green4"
-																	rounded="$3"
-																>
-																	<CheckCircle2 size={14} color="$green11" />
-																	<Text
-																		fontSize="$3"
-																		fontWeight="600"
-																		color="$green11"
-																	>
-																		{scan.canEat.length} Safe
-																	</Text>
-																</XStack>
-															)}
-
-															{scan.cannotEat.length > 0 && (
-																<XStack
-																	px="$3"
-																	py="$2"
-																	gap="$1"
-																	flex={1}
-																	items="center"
-																	justify="center"
-																	bg="$red4"
-																	rounded="$3"
-																>
-																	<XCircle size={14} color="$red11" />
-																	<Text
-																		fontSize="$3"
-																		fontWeight="600"
-																		color="$red11"
-																	>
-																		{scan.cannotEat.length} Avoid
-																	</Text>
-																</XStack>
-															)}
-
-															{scan.askRestaurant.length > 0 && (
-																<XStack
-																	px="$3"
-																	py="$2"
-																	gap="$1"
-																	flex={1}
-																	items="center"
-																	justify="center"
-																	bg="$yellow4"
-																	rounded="$3"
-																>
-																	<AlertCircle size={14} color="$yellow11" />
-																	<Text
-																		fontSize="$3"
-																		fontWeight="600"
-																		color="$yellow11"
-																	>
-																		{scan.askRestaurant.length} Ask
-																	</Text>
-																</XStack>
-															)}
-														</XStack>
-													</Card>
-												</TouchableOpacity>
-											))}
-										</YStack>
-									</YStack>
-								);
-							})}
-						</YStack>
-					)}
-				</View>
-			</ScrollView>
+					);
+				}}
+				ListHeaderComponent={
+					<XStack justify="flex-end" mb="$1">
+						<Button size="$3" chromeless onPress={clearHistory}>
+							<Trash2 size={16} color="$red11" />
+							<Text color="$red11">Clear all</Text>
+						</Button>
+					</XStack>
+				}
+				contentContainerStyle={{ paddingBottom: 16 }}
+			/>
 		</View>
 	);
 }

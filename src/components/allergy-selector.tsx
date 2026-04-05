@@ -3,19 +3,16 @@ import { useFocusEffect } from "expo-router";
 import { useCallback, useState } from "react";
 import { Button, Text, View } from "tamagui";
 import { AllergyCard } from "@/components/allergy-card";
+import { ALLERGIES } from "@/constants";
 import { useAllergyStore } from "@/store/allergies";
 import type { Allergy } from "@/types/allergies";
-
-type Props = {
-	allergies: Allergy[];
-	onSave: (allergies: Allergy[]) => void;
-};
 
 function keyExtractor(item: Allergy) {
 	return item;
 }
 
-export function AllergySelector({ allergies, onSave }: Props) {
+export function AllergySelector() {
+	const setAllergies = useAllergyStore((state) => state.setAllergies);
 	const savedAllergies = useAllergyStore((state) => state.allergies);
 	const [formState, setFormState] = useState(savedAllergies);
 
@@ -34,7 +31,7 @@ export function AllergySelector({ allergies, onSave }: Props) {
 	}
 
 	function handleSave() {
-		onSave(formState);
+		setAllergies(formState);
 	}
 
 	function renderItem({ item }: { item: Allergy }) {
@@ -50,7 +47,7 @@ export function AllergySelector({ allergies, onSave }: Props) {
 	return (
 		<View flex={1}>
 			<FlashList
-				data={allergies}
+				data={ALLERGIES}
 				renderItem={renderItem}
 				keyExtractor={keyExtractor}
 				numColumns={2}
@@ -60,13 +57,15 @@ export function AllergySelector({ allergies, onSave }: Props) {
 				}}
 			/>
 			<Button
-				bg="$blue11"
+				bg="#003D9B"
 				size="$6"
-				rounded="$8"
-				mt="$6"
+				rounded={9999}
+				mt="$8"
 				onPress={handleSave}
 				pressStyle={{
-					bg: "$blue12",
+					scale: 0.98,
+					bg: "#003D9B",
+					opacity: 0.9,
 				}}
 			>
 				<Text color="$white" fontSize="$5" fontWeight={600}>

@@ -1,5 +1,5 @@
 import { Sparkles } from "@tamagui/lucide-icons-2";
-import { Button, Text, View } from "tamagui";
+import { Button, Text, View, YStack } from "tamagui";
 import { MedicalDisclaimer } from "@/components/medical-disclaimer";
 
 interface AnalyzingMenuProps {
@@ -8,35 +8,51 @@ interface AnalyzingMenuProps {
 
 export function AnalyzingMenu({ onCancel }: AnalyzingMenuProps) {
 	return (
-		<View px="$4" flex={1} justify="center" items="center" bg="$white">
+		<YStack
+			px="$4"
+			flex={1}
+			justify="center"
+			items="center"
+			bg="$white"
+			gap="$6"
+		>
 			<View
 				height="$12"
 				width="$12"
-				bg="$blue11"
+				bg="#DBE5F4"
 				rounded={9999}
 				mb="$4"
 				justify="center"
 				items="center"
 				borderWidth="$3"
-				borderColor="$blue4"
+				borderColor="#003D9B"
 				self="center"
 			>
-				<Sparkles size={40} color="$white" />
+				<Sparkles size={40} color="#003D9B" />
 			</View>
-			<Text text="center" fontSize="$7" fontWeight={700} mt="$4">
-				Analyzing the menu...
-			</Text>
-			<Text text="center" fontSize="$4" color="$gray11" mt="$2" lineHeight="$5">
-				This may take a moment. Please wait while we check for allergens and
-				dietary information.
-			</Text>
+			<View>
+				<Text text="center" fontSize="$7" fontWeight={700}>
+					Analyzing the menu...
+				</Text>
+				<Text
+					text="center"
+					fontSize="$4"
+					color="$gray11"
+					mt="$2"
+					lineHeight="$5"
+				>
+					This may take a moment. Please wait while we check for allergens and
+					dietary information.
+				</Text>
+			</View>
 			<MedicalDisclaimer />
 			<Button
-				mt="$4"
-				bg="$blue11"
+				bg="#003D9B"
 				rounded="$8"
 				pressStyle={{
-					bg: "$blue12",
+					bg: "#003D9B",
+					opacity: 0.9,
+					scale: 0.98,
 				}}
 				onPress={onCancel}
 			>
@@ -44,6 +60,6 @@ export function AnalyzingMenu({ onCancel }: AnalyzingMenuProps) {
 					Cancel
 				</Text>
 			</Button>
-		</View>
+		</YStack>
 	);
 }

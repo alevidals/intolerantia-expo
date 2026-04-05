@@ -1,5 +1,5 @@
 import { AlertCircle } from "@tamagui/lucide-icons-2";
-import { Button, Text, View } from "tamagui";
+import { Button, Text, View, YStack } from "tamagui";
 
 interface AnalyzingErrorProps {
 	onRetry?: () => void;
@@ -8,34 +8,51 @@ interface AnalyzingErrorProps {
 
 export function AnalyzingError({ onRetry, onCancel }: AnalyzingErrorProps) {
 	return (
-		<View px="$4" flex={1} justify="center" items="center" bg="$white">
+		<YStack
+			px="$4"
+			flex={1}
+			justify="center"
+			items="center"
+			bg="$white"
+			gap="$6"
+		>
 			<View
 				height="$12"
 				width="$12"
-				bg="$red10"
+				bg="$red4"
 				rounded={9999}
 				mb="$4"
 				justify="center"
 				items="center"
 				borderWidth="$3"
-				borderColor="$red4"
+				borderColor="$red10"
 				self="center"
 			>
-				<AlertCircle size={40} color="$white" />
+				<AlertCircle size={40} color="$red10" />
 			</View>
-			<Text text="center" fontSize="$7" fontWeight={700} mt="$4">
-				Analysis failed
-			</Text>
-			<Text text="center" fontSize="$4" color="$gray11" mt="$2" lineHeight="$5">
-				We couldn't analyze this menu. Please ensure the images are clear and
-				try again.
-			</Text>
+			<View>
+				<Text text="center" fontSize="$7" fontWeight={700}>
+					Analysis failed
+				</Text>
+				<Text
+					text="center"
+					fontSize="$4"
+					color="$gray11"
+					mt="$2"
+					lineHeight="$5"
+				>
+					We couldn't analyze this menu. Please ensure the images are clear and
+					try again.
+				</Text>
+			</View>
 			<View gap="$3" mt="$6" width="100%">
 				<Button
-					bg="$blue11"
+					bg="#003D9B"
 					rounded="$8"
 					pressStyle={{
-						bg: "$blue12",
+						bg: "#003D9B",
+						opacity: 0.9,
+						scale: 0.98,
 					}}
 					onPress={onRetry}
 				>
@@ -56,6 +73,6 @@ export function AnalyzingError({ onRetry, onCancel }: AnalyzingErrorProps) {
 					</Text>
 				</Button>
 			</View>
-		</View>
+		</YStack>
 	);
 }

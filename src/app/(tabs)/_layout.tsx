@@ -1,6 +1,6 @@
 import { History, ScanText, Settings2 } from "@tamagui/lucide-icons-2";
 import { Tabs, usePathname } from "expo-router";
-import { getTokens } from "tamagui";
+import { getTokens, useTheme } from "tamagui";
 import { TabItem } from "@/components/tab-item";
 
 export default function TabsLayout() {
@@ -8,11 +8,15 @@ export default function TabsLayout() {
 
 	const tokens = getTokens();
 	const borderRadius10 = tokens.radius.$10.val;
+	const theme = useTheme();
 
 	return (
 		<Tabs
 			screenOptions={{
 				headerShown: false,
+				sceneStyle: {
+					backgroundColor: theme.background.val,
+				},
 				tabBarStyle: {
 					margin: 0,
 					borderTopStartRadius: borderRadius10,
@@ -35,11 +39,10 @@ export default function TabsLayout() {
 								onPress={onPress}
 								icon={
 									<ScanText
-										color={focused ? "$blue9" : "$gray10"}
+										color={focused ? "#003D9B" : "black"}
 										self="center"
 									/>
 								}
-								label="Scanner"
 							/>
 						);
 					},
@@ -59,11 +62,10 @@ export default function TabsLayout() {
 								onPress={onPress}
 								icon={
 									<History
-										color={focused ? "$blue9" : "$gray10"}
+										color={focused ? "#003D9B" : "black"}
 										self="center"
 									/>
 								}
-								label="History"
 							/>
 						);
 					},
@@ -83,11 +85,10 @@ export default function TabsLayout() {
 								onPress={onPress}
 								icon={
 									<Settings2
-										color={focused ? "$blue9" : "$gray10"}
+										color={focused ? "#003D9B" : "black"}
 										self="center"
 									/>
 								}
-								label="Settings"
 							/>
 						);
 					},
