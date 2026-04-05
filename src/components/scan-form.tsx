@@ -24,6 +24,14 @@ export function ScanForm({ abortControllerRef }: Props) {
 	const router = useRouter();
 
 	async function scanImages() {
+		if (allergies.length === 0) {
+			Alert.alert(
+				"No allergies selected",
+				"Please select at least one allergy before scanning. Go to the Settings tab to add your allergies.",
+			);
+			return;
+		}
+
 		setIsLoading(true);
 		router.push("/loading");
 		abortControllerRef.current = new AbortController();

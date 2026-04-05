@@ -13,7 +13,7 @@
 		"@ai-sdk/react": "3.0.144",
 		"@openrouter/ai-sdk-provider": "^2.3.3",
 		"@react-native-async-storage/async-storage": "2.2.0",
-		"@shopify/flash-list": "2.3.1",
+		"@shopify/flash-list": "2.0.2",
 		"@tamagui/config": "2.0.0-rc.31",
 		"@tamagui/lucide-icons-2": "2.0.0-rc.31",
 		"ai": "6.0.142",
@@ -30,7 +30,7 @@
 		"react-native": "0.81.5",
 		"react-native-safe-area-context": "~5.6.0",
 		"react-native-screens": "~4.16.0",
-		"react-native-svg": "^15.12.1",
+		"react-native-svg": "15.12.1",
 		"tamagui": "2.0.0-rc.31",
 		"zod": "4.3.6",
 		"zustand": "^5.0.12"

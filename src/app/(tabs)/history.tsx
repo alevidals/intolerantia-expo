@@ -1,6 +1,7 @@
 import { FlashList } from "@shopify/flash-list";
 import { Trash2 } from "@tamagui/lucide-icons-2";
-import { Button, Text, View, XStack } from "tamagui";
+import { Button, Text, View, XStack, YStack } from "tamagui";
+import { EmptyIllustration } from "@/components/empty-illustration";
 import { HistoryCard } from "@/components/history-card";
 import { useHistoryStore } from "@/store/history";
 
@@ -94,11 +95,12 @@ export default function HistoryTab() {
 
 	if (!history || history.length === 0) {
 		return (
-			<View px="$4" flex={1} mb="$6">
-				<Text color="#003D9B" fontSize="$4">
+			<YStack px="$4" flex={1} mb="$6" items="center" justify="center" gap="$8">
+				<Text color="#003D9B" fontSize="$5" text="center" fontWeight={600}>
 					No scans yet. Start analyzing menus!
 				</Text>
-			</View>
+				<EmptyIllustration width={200} height={200} />
+			</YStack>
 		);
 	}
 
