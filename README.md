@@ -14,7 +14,7 @@ IntolerantIA is an application that uses artificial intelligence to help people 
 
 ## 🖼️ Screenshots and videos
 
-https://github.com/alevidals/intolerantia-expo/raw/refs/heads/main/examples/video-example.mov
+https://github.com/alevidals/intolerantia-expo/raw/refs/heads/main/examples/video-example.mp4
 
 <div>
     <img src="./examples/image-example.png" width="500"
