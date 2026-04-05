@@ -97,12 +97,9 @@ export function ScanForm({ abortControllerRef }: Props) {
 			mediaTypes: ["images"],
 			base64: true,
 			allowsMultipleSelection: false,
-			aspect: [16, 9],
-			shape: "rectangle",
-			allowsEditing: true,
+			allowsEditing: false,
 			quality: 1,
 		});
-
 		if (!result.canceled) {
 			const asset = result.assets[0];
 

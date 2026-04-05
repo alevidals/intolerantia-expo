@@ -1,5 +1,5 @@
+import { createFireworks } from "@ai-sdk/fireworks";
 import { generateText, type ImagePart, type ModelMessage, Output } from "ai";
-import { ollama } from "ai-sdk-ollama";
 import { z } from "zod";
 import { scanOutputSchema } from "@/types/scan";
 
@@ -27,6 +27,10 @@ function parseImageDataUrl(image: string) {
 	};
 }
 
+const fireworks = createFireworks({
+	apiKey: process.env.AI_GATEWAY_API_KEY,
+});
+
 export async function POST(request: Request) {
 	const data = await request.json();
 
@@ -46,54 +50,24 @@ export async function POST(request: Request) {
 		.map((allergy) => allergy.toLowerCase())
 		.join(", ");
 
-	const prompt = `You are a strict food menu classifier and allergy-aware nutritionist.
+	let prompt = `You are a nutritionist expert in allergies. Your task is to analyze the following images to determine if they all correspond to menus from a restaurant, bar, ice-cream parlour, or similar establishment. If any image does not correspond to a menu, return the JSON: {"success": false}. If all images are confirmed to be menus, proceed to analyze the content based on the user's allergies`;
 
-STEP 1 — MENU VALIDATION:
-Analyze ALL provided images and determine if they are restaurant menus.
+	prompt += `\n\nThe user allergies are: ${parsedAllergies}.\n\n`;
 
-A valid menu MUST:
-- Contain a list of food or drink items
-- Include item names, descriptions, or prices
-- Belong to a restaurant, bar, cafe, or similar
+	prompt += ` Classify each menu item into one of three categories:
 
-NOT a menu (FAIL immediately if ANY image matches these):
-- Receipts or tickets
-- Invoices
-- Random food photos
-- Product packaging
-- Signs without food listings
-- Screenshots not showing a menu
-- Text documents without food items
+  - **canEat**: Items that are safe for the user to eat.
+  - **cannotEat**: Items that the user should avoid.
+  - **askRestaurant**: Items that might be risky and require confirmation from the restaurant.
 
-If ANY image is NOT a valid menu, return ONLY:
-{"success": false}
+  Return the result in the following JSON format:
+  {
+    "canEat": [],
+    "cannotEat": [],
+    "askRestaurant": [],
+    "success": true
+  }`;
 
-Do not continue to STEP 2.
-
-STEP 2 — ALLERGY ANALYSIS:
-If ALL images are valid menus, extract all menu items and classify them based on the user's allergies.
-
-User allergies:
-${parsedAllergies}
-
-Classify each item into EXACTLY one category:
-
-- "canEat": clearly safe (no allergens present)
-- "cannotEat": clearly contains allergens
-- "askRestaurant": unclear, incomplete info, or possible cross-contamination
-
-Be conservative:
-- If unsure → "askRestaurant"
-- Do NOT guess ingredients
-
-OUTPUT FORMAT (strict JSON only, no explanation):
-{
-  "canEat": [],
-  "cannotEat": [],
-  "askRestaurant": [],
-  "success": true
-}
-`;
 	const parsedImages = images
 		.map(parseImageDataUrl)
 		.filter(
@@ -129,7 +103,7 @@ OUTPUT FORMAT (strict JSON only, no explanation):
 
 	try {
 		const { output } = await generateText({
-			model: ollama("gemma3:4b"),
+			model: fireworks("accounts/fireworks/routers/kimi-k2p5-turbo"),
 			messages,
 			output: Output.object({
 				schema: scanOutputSchema,
@@ -138,6 +112,7 @@ OUTPUT FORMAT (strict JSON only, no explanation):
 
 		return Response.json(output);
 	} catch (error) {
+		console.error("Error during menu analysis:", error);
 		return Response.json(
 			{ error: "Failed to analyze the menu. Please try again." },
 			{ status: 500 },
