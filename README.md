@@ -16,7 +16,7 @@ IntolerantIA is an application that uses artificial intelligence to help people 
 
 <div>
     <video controls width="200">
-        <source src="./examples/video-example.mov" type="video/mp4">
+        <source src="./examples/video-example.mov" type="video/mov">
         Your browser does not support the video tag.
     </video>
 </div>
